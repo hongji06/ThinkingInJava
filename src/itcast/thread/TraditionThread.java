@@ -1,9 +1,8 @@
 package itcast.thread;
 
 public class TraditionThread {
-
 	public static void main(String[] args) {
-
+		
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
