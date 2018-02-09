@@ -8,6 +8,8 @@
  */
 package chapter21.concurrency;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -16,43 +18,40 @@ import java.util.concurrent.locks.ReentrantLock;
 class MyService {
     private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
-    private boolean flag = true;
+    private boolean flag = false;// 是否有生產
 
-    public void await() {
+    public void await(int i) {
         try {
             lock.lock();
-            while (flag) {
-                System.out.println("buy apple");
+            while (!flag) {
+                System.out.println(Thread.currentThread().getName()+" "+i+"沒有產品，等待生產...");
                 condition.await();
             }
-            System.out.println("no apple ask for create");
-            flag = true;
+            System.out.println(Thread.currentThread().getName()+" "+i+"消費產品...");
+            flag = false;// 消費後設置為沒有
             TimeUnit.MILLISECONDS.sleep(200);
             condition.signal();
         } catch (InterruptedException e) {
             System.out.println("await() interrupted");
         } finally {
             lock.unlock();
-            System.out.println("await() unlock");
         }
     }
 
-    public void signal() {
+    public void signal(int i) {
         try {
             lock.lock();
             while (!flag) {
-                System.out.println("creating......apple");
+                System.out.println(Thread.currentThread().getName()+" "+i+"正在生產產品......");
+                TimeUnit.MILLISECONDS.sleep(200);
+                flag = true;
                 condition.signal();
             }
-            System.out.println("had apple signal for buy");
-            flag = false;
-            TimeUnit.MILLISECONDS.sleep(200);
             condition.await();
         } catch (InterruptedException e) {
             System.out.println("signal() interrupted");
         } finally {
             lock.unlock();
-            System.out.println("signal() unlock");
         }
     }
 }
@@ -67,8 +66,9 @@ class ConsumerA implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
-            service.await();
+            service.await(i);
         }
+
     }
 
 }
@@ -84,7 +84,7 @@ class CustomerA implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
-            service.signal();
+            service.signal(i);
         }
     }
 }
@@ -93,12 +93,11 @@ public class UseConditionWaitNotifyDemo {
 
     public static void main(String[] args) throws Exception {
         MyService myService = new MyService();
+        ExecutorService exec = Executors.newCachedThreadPool();
 
-        new Thread(new CustomerA(myService)) {
-        }.start();
-        
-        new Thread(new ConsumerA(myService)) {
-        }.start();
+        exec.execute(new CustomerA(myService));
+        exec.execute(new ConsumerA(myService));
+        exec.shutdown();
     }
 
 }

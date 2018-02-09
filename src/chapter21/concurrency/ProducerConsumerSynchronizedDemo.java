@@ -35,7 +35,6 @@ class Buffer {
             Thread.sleep(1000);
             notifyAll();// 唤起线程
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -49,11 +48,10 @@ class Buffer {
                 wait();// 阻塞线程
             }
             Date d = ((LinkedList<Date>) storage).poll();
-            System.out.print(Thread.currentThread().getName() + ": take:" + storage.size() + "\n");
+            System.out.print(Thread.currentThread().getName() + ": take:" + storage.size() + ":" + d + "\n");
             Thread.sleep(1000);
             notifyAll();// 唤起线程
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
