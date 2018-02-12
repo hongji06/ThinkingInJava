@@ -2,7 +2,7 @@
  * @{#} SweetShop.java Create on 2018年2月1日 上午10:49:56 
  * @Title:  SweetShop.java   
  * @Package chapter14.typeinfo   
- * @Description:TODO(用一句话描述该文件做什么)   
+ * @Description:   
  * @author: <a href="https://github.com/hongji06">hongji06</a>   
  * @version 1.0 
  * Copyright (c) 2018 by XuHongji.   
