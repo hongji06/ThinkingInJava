@@ -9,10 +9,10 @@
 package todo;
 
 public class LearningMap {
-    // TODO: java IO/NIO
-    // TODO: concurrency
-    // TODO: reflection
-    // TODO: network
+    // TODO: java IO/NIO =>step1 ok
+    // TODO: concurrency =>step1 ok
+    // TODO: reflection =>step1 ok
+    // TODO: network(TCP/UDP/URL) =>step1 ok
     // TODO: collection
     // TODO: jvm
     // TODO: jdbc
@@ -22,5 +22,4 @@ public class LearningMap {
     // TODO: spring boot/spring cloud
     // TODO: shiro
     // TODO: open source project
-
 }
